@@ -1,0 +1,31 @@
+
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: nexus-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+      
+  redis:
+    image: redis:7.2-alpine
+    container_name: nexus-redis
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+
+  redis-insight:
+    image: redis/redisinsight:latest
+    container_name: nexus-redis-gui
+    ports:
+      - "5540:5540"
+    depends_on:
+      - redis
+
+volumes:
+  mongo_data:
+  redis_data:
